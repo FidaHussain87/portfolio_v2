@@ -2,11 +2,12 @@
 import Link from "next/link";
 import { Button } from "./ui/button";
 import { useState } from "react";
-
+import { motion } from "framer-motion";
 // icons
 import { FaGithub } from "react-icons/fa";
 import { FaFacebook } from "react-icons/fa";
 import { FaLinkedin } from "react-icons/fa";
+
 import NavLink from "./NavLink";
 
 const menus = [
@@ -17,6 +18,34 @@ const menus = [
 ];
 const Navbar = () => {
   const [open, setOpen] = useState(false);
+
+  const topVariants = {
+    closed: { rotate: 0 },
+    opened: { rotate: 45, backgroundColor: "rgb(255,255,255)" },
+  };
+
+  const centerVariants = {
+    closed: { opacity: 1 },
+    opened: { opacity: 0 },
+  };
+  const bottomVariants = {
+    closed: { rotate: 0 },
+    opened: { rotate: -45, backgroundColor: "rgb(255,255,255)" },
+  };
+  const listVariants = {
+    closed: { x: "100vw" },
+    opened: {
+      x: 0,
+      transition: {
+        when: "beforeChildren",
+        staggerChildren: 0.3,
+      },
+    },
+  };
+  const listItemVariants = {
+    closed: { x: -10, opacity: 0 },
+    opened: { x: 0, opacity: 1 },
+  };
 
   const handleMenu = () => {
     setOpen(!open);
@@ -54,24 +83,45 @@ const Navbar = () => {
         </Link>
       </div>
       {/* RESPONSIVE Menu */}
-      <div className=" md:hidden">
+      <div className=" md:hidden z-40">
         <button
-          className="w-10 h-8 flex flex-col justify-between z-50 relative"
+          className="w-10 h-8 flex flex-col justify-between relative z-40"
           onClick={handleMenu}
         >
-          <div className="w-10 h-1 bg-[#0F172A] rounded"></div>
-          <div className="w-10 h-1 bg-[#0F172A] rounded"></div>
-          <div className="w-10 h-1 bg-[#0F172A] rounded"></div>
+          <motion.div
+            variants={topVariants}
+            animate={open ? "opened" : "closed"}
+            className="w-10 h-1 bg-[#0F172A] rounded origin-left"
+          ></motion.div>
+          <motion.div
+            variants={centerVariants}
+            animate={open ? "opened" : "closed"}
+            className="w-10 h-1 bg-[#0F172A] rounded"
+          ></motion.div>
+          <motion.div
+            variants={bottomVariants}
+            animate={open ? "opened" : "closed"}
+            className="w-10 h-1 bg-[#0F172A] rounded origin-left"
+          ></motion.div>
         </button>
         {/* Menu List */}
         {open && (
-          <div className="absolute top-0 left-0 w-screen h-screen bg-[#0F172A] text-white flex flex-col items-center justify-center gap-8 text-4xl">
+          <motion.div
+            variants={listVariants}
+            initial="closed"
+            animate="opened"
+            className="absolute top-0 left-0 w-screen h-screen bg-[#0F172A] text-white flex flex-col items-center justify-center gap-8 text-4xl"
+          >
             {menus?.map((link) => (
-              <Link href={link.url} key={link.title}>
-                {link.title}
-              </Link>
+              <motion.div
+                variants={listItemVariants}
+                className=""
+                key={link.title}
+              >
+                <Link href={link.url}>{link.title}</Link>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         )}
       </div>
     </div>
