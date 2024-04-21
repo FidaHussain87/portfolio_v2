@@ -5,7 +5,7 @@ import React from "react";
 
 const NavLink = ({ link }: any) => {
   const pathName = usePathname();
-  console.log("PathName: ", pathName);
+
   return (
     <Link
       className={` rounded p-1 ${
@@ -15,7 +15,6 @@ const NavLink = ({ link }: any) => {
     >
       {link.title}
     </Link>
-   
   );
 };
 
